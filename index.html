@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Park | Data Extraction & Security</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --surface-elevated: #111111;
+            --border: rgba(255,255,255,0.06);
+            --text: #e2e2e2;
+            --text-muted: #6b6b6b;
+            --accent: #a855f7;
+            --accent-dim: rgba(168,85,247,0.1);
+            --accent-glow: rgba(168,85,247,0.3);
+            --font-body: 'Inter', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+        /* Gradient Orbs */
+        .orb { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.15; pointer-events: none; z-index: 0; }
+        .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -200px; animation: float 20s ease-in-out infinite; }
+        .orb-2 { width: 400px; height: 400px; background: #ec4899; bottom: 10%; left: -100px; animation: float 15s ease-in-out infinite reverse; }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-20px, 20px); }
+        }
+
+        /* Navigation */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        nav .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; height: 72px; }
+        .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta { background: var(--accent); color: var(--bg) !important; padding: 10px 24px; border-radius: 100px; font-weight: 600; }
+        .nav-cta:hover { opacity: 0.9; }
+
+        /* Hero */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px 80px; position: relative; }
+        .hero-content { max-width: 1200px; text-align: center; position: relative; z-index: 1; margin: 0 auto; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; text-align: left; max-width: 1200px; margin: 0 auto; }
+        @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } }
+        .hero-badge { display: inline-block; padding: 8px 16px; background: var(--accent-dim); border: 1px solid rgba(168,85,247,0.2); border-radius: 100px; font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.03em; }
+        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; }
+        .hero-cta { display: inline-flex; align-items: center; gap: 12px; background: var(--accent); color: var(--bg); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: all 0.3s; box-shadow: 0 0 40px rgba(168,85,247,0.3); }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(168,85,247,0.4); }
+
+        /* Code Block Visual */
+        .code-visual { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-top: 48px; text-align: left; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8125rem; line-height: 1.8; overflow: hidden; position: relative; }
+        .code-visual::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
+        .code-line { display: flex; gap: 16px; }
+        .line-num { color: var(--text-muted); min-width: 24px; text-align: right; user-select: none; }
+        .code-k { color: var(--accent); }
+        .code-v { color: #ec4899; }
+        .code-s { color: #6b6b6b; }
+        .code-n { color: #f59e0b; }
+
+        /* Stats Bar */
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 900px; margin: 80px auto 0; padding: 32px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 16px; }
+        .stat-item { text-align: center; }
+        .stat-value { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--accent); }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+        /* Sections */
+        section { padding: 120px 24px; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 16px; }
+        .section-header p { color: var(--text-muted); font-size: 1.125rem; max-width: 560px; margin: 0 auto; }
+
+        /* Services */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .service-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 32px; transition: all 0.3s; }
+        .service-card:hover { border-color: rgba(168,85,247,0.3); transform: translateY(-4px); }
+        .service-icon { width: 48px; height: 48px; background: var(--accent-dim); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+        .service-card h3 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; margin-bottom: 8px; }
+        .service-card > p { color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; margin-bottom: 20px; }
+        .service-features { list-style: none; }
+        .service-features li { padding: 6px 0; color: var(--text-muted); font-size: 0.8125rem; display: flex; align-items: center; gap: 8px; }
+        .service-features li::before { content: '→'; color: var(--accent); font-weight: 600; }
+
+        /* Projects */
+        .projects-grid { display: flex; flex-direction: column; gap: 24px; }
+        .project-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+        .project-content { padding: 40px; }
+        .project-tag { display: inline-block; padding: 4px 12px; background: var(--accent-dim); border-radius: 100px; font-size: 0.6875rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+        .project-card h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; margin-bottom: 12px; }
+        .project-card p { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.7; margin-bottom: 24px; }
+        .project-metrics { display: flex; gap: 32px; margin-bottom: 24px; }
+        .project-metric .value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .project-metric .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .project-tags span { padding: 4px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); }
+        .project-visual { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(168,85,247,0.05), rgba(236,72,153,0.05)); border-left: 1px solid var(--border); padding: 40px; }
+
+        /* Team */
+        .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .team-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+        .team-avatar { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), #ec4899); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--bg); margin-bottom: 20px; }
+        .team-card h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 4px; }
+        .team-card .role { color: var(--accent); font-size: 0.875rem; font-weight: 500; margin-bottom: 12px; }
+        .team-card .bio { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.7; margin-bottom: 20px; }
+        .team-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+        .team-skills span { padding: 4px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); }
+        .team-certs { border-top: 1px solid var(--border); padding-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .cert-badge { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; min-width: 100px; text-align: center; }
+        .cert-badge:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
+        .cert-badge strong { color: var(--text); font-size: 0.875rem; font-weight: 600; }
+        .cert-badge span { color: var(--text-muted); font-size: 0.6875rem; }
+
+        /* Pricing */
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+        .pricing-card {
+            background: var(--surface-elevated); border: 1px solid var(--border);
+            border-radius: 24px; padding: 40px; position: relative;
+            display: flex; flex-direction: column;
+        }
+        .pricing-card.featured {
+            border-color: rgba(168,85,247,0.3);
+            box-shadow: 0 0 60px rgba(168,85,247,0.08);
+        }
+        .pricing-badge {
+            position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: var(--bg);
+            padding: 6px 20px; border-radius: 0 0 12px 12px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+        }
+        .pricing-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 8px; }
+        .pricing-card .desc { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 24px; }
+        .pricing-card .price {
+            font-family: var(--font-display); font-size: 3rem; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .pricing-card .price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+        .pricing-card .period { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 32px; }
+        .pricing-features { list-style: none; }
+        .pricing-features li {
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+            color: var(--text-muted); font-size: 0.9375rem;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .pricing-features li:last-child { border-bottom: none; }
+        .pricing-features li::before { content: '✓'; color: var(--accent); font-weight: 700; }
+
+        /* CTA */
+        .cta-section { text-align: center; }
+        .cta-section h2 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 16px; }
+        .cta-section p { color: var(--text-muted); font-size: 1.125rem; max-width: 560px; margin: 0 auto 40px; }
+        .cta-email { display: inline-flex; align-items: center; gap: 12px; background: var(--surface-elevated); border: 1px solid var(--border); padding: 16px 32px; border-radius: 100px; color: var(--text); text-decoration: none; font-weight: 600; transition: all 0.3s; }
+        .cta-email:hover { border-color: var(--accent); box-shadow: 0 0 40px rgba(168,85,247,0.1); }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 40px 24px; }
+        footer .container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        footer p { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .project-card { grid-template-columns: 1fr; }
+            .project-visual { height: 300px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: none; }
+        }
+        @media (max-width: 640px) {
+            .nav-links a:not(.nav-cta) { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            section { padding: 80px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">Black <span>Park</span></a>
+            <div class="nav-links">
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#team">Team</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact" class="nav-cta">Get in touch</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="hero-badge">Data Extraction & Security</div>
+            <h1>We extract data.<br>We test <span class="gradient">security.</span></h1>
+            <p>Black Park builds automated pipelines that collect, process, and deliver data — then we break them to make sure they're safe.</p>
+            <a href="mailto:hello@blackpark.io" class="hero-cta">Start a project →</a>
+            </div>
+            003cdiv class="code-visual" style="margin-top:0;"003e
+
+            <div class="code-visual">
+                <div class="code-line"><span class="line-num">1</span><span class="code-k">from</span> blackpark <span class="code-k">import</span> Extractor, Auditor</div>
+                <div class="code-line"><span class="line-num">2</span></div>
+                <div class="code-line"><span class="line-num">3</span>pipeline = Extractor(</div>
+                <div class="code-line"><span class="line-num">4</span>  proxies=<span class="code-v">"rotating"</span>,</div>
+                <div class="code-line"><span class="line-num">5</span>  anti_detect=<span class="code-n">True</span>,</div>
+                <div class="code-line"><span class="line-num">6</span>  output=<span class="code-v">"structured_json"</span></div>
+                <div class="code-line"><span class="line-num">7</span>)</div>
+                <div class="code-line"><span class="line-num">8</span></div>
+                <div class="code-line"><span class="line-num">9</span><span class="code-s"># 56,802 records extracted, validated, secured</span></div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">56K+</div>
+                    <div class="stat-label">Records Extracted</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Orgs Monitored</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>What We Do</h2>
+                <p>From data extraction to security audits — we handle the complex stuff so you don't have to.</p>
+            </div>
+
+            <div style="margin-bottom:60px;">
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🎯 Data & Automation</h3>
+                <div class="services-grid">
+                    <div class="service-card reveal">
+                        <div class="service-icon">🎯</div>
+                        <h3>Data Extraction</h3>
+                        <p>We extract data from websites that block normal tools. Prices, products, contacts — whatever you need, we get it.</p>
+                        <ul class="service-features">
+                            <li>Works on protected sites</li>
+                            <li>Handles CAPTCHAs automatically</li>
+                            <li>JavaScript-heavy pages</li>
+                            <li>Runs on schedule</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">⚡</div>
+                        <h3>Automation Pipelines</h3>
+                        <p>Set it and forget it. We build systems that collect, clean, and deliver data to your tools automatically.</p>
+                        <ul class="service-features">
+                            <li>Daily/weekly schedules</li>
+                            <li>Auto-fixes when things break</li>
+                            <li>Email/Slack alerts</li>
+                            <li>Runs on your cloud</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">🔧</div>
+                        <h3>Legacy Integration</h3>
+                        <p>Still using old software? We connect legacy systems to modern tools without losing any data.</p>
+                        <ul class="service-features">
+                            <li>Old ERP to modern API</li>
+                            <li>Data cleanup & transfer</li>
+                            <li>No downtime during switch</li>
+                            <li>Full backup included</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">🤖</div>
+                        <h3>AI Systems Integration</h3>
+                        <p>Custom AI agents and document processors trained on your business data. From chatbots to automated report generation.</p>
+                        <ul class="service-features">
+                            <li>GPT-powered chatbots</li>
+                            <li>Document analysis pipelines</li>
+                            <li>Internal knowledge bases</li>
+                            <li>AI + scraping combined</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🛡️ Security Services</h3>
+                <div class="services-grid">
+                    <div class="service-card reveal">
+                        <div class="service-icon">🌐</div>
+                        <h3>Website Security Check</h3>
+                        <p>We try to break into your website like a real attacker. Then show you exactly how to lock the doors.</p>
+                        <ul class="service-features">
+                            <li>Login & payment form testing</li>
+                            <li>Find data leak risks</li>
+                            <li>Check hidden admin pages</li>
+                            <li>Video proof of each issue</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">📱</div>
+                        <h3>App Security Audit</h3>
+                        <p>Mobile app testing for startups. We check if your app leaks customer data or has backdoors.</p>
+                        <ul class="service-features">
+                            <li>API & database checks</li>
+                            <li>Payment flow testing</li>
+                            <li>User data protection</li>
+                            <li>App store compliance</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">🎯</div>
+                        <h3>Small Business Security Package</h3>
+                        <p>Everything checked in one go: website, network, emails, and cloud accounts. Perfect for businesses without an IT team.</p>
+                        <ul class="service-features">
+                            <li>Full infrastructure scan</li>
+                            <li>Employee phishing test</li>
+                            <li>Cloud account audit</li>
+                            <li>Priority fix roadmap</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">🔍</div>
+                        <h3>Network Security Scan</h3>
+                        <p>We scan your office network and servers to find hidden entry points before hackers do.</p>
+                        <ul class="service-features">
+                            <li>Find weak passwords & open ports</li>
+                            <li>Check Wi-Fi security</li>
+                            <li>Test file sharing access</li>
+                            <li>Plain-English fix guide</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Selected Work</h2>
+                <p>Real projects, real results. Every number is verified.</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card reveal">
+                    <div class="project-content">
+                        <span class="project-tag">🏛️ Government Intelligence</span>
+                        <h3>Project Intelligence Pipeline</h3>
+                        <p>Built a scalable pipeline scraping 56,802 government project records with automated PDF processing and LLM-powered field extraction.</p>
+                        <div class="project-metrics">
+                            <div class="project-metric"><div class="value">56K+</div><div class="label">Records</div></div>
+                            <div class="project-metric"><div class="value">15+</div><div class="label">Fields</div></div>
+                            <div class="project-metric"><div class="value">Monthly</div><div class="label">Updates</div></div>
+                        </div>
+                        <div class="project-tags">
+                            <span>Python</span><span>Playwright</span><span>LLM Extraction</span><span>AWS</span>
+                        </div>
+                    </div>
+                    <div class="project-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                            <rect x="40" y="40" width="120" height="120" rx="8" stroke="rgba(168,85,247,0.3)" stroke-width="1" fill="none"/>
+                            <rect x="60" y="60" width="80" height="8" rx="4" fill="rgba(168,85,247,0.2)"/>
+                            <rect x="60" y="80" width="60" height="6" rx="3" fill="rgba(168,85,247,0.15)"/>
+                            <rect x="60" y="96" width="70" height="6" rx="3" fill="rgba(168,85,247,0.15)"/>
+                            <rect x="60" y="112" width="50" height="6" rx="3" fill="rgba(168,85,247,0.15)"/>
+                            <circle cx="140" cy="60" r="8" fill="var(--accent)" opacity="0.6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-content">
+                        <span class="project-tag">🎯 Charity Intelligence</span>
+                        <h3>Leadership Contact Discovery</h3>
+                        <p>Adaptive scraper that discovers leadership pages across 50+ charity websites, extracting decision-maker contacts with role verification.</p>
+                        <div class="project-metrics">
+                            <div class="project-metric"><div class="value">50+</div><div class="label">Websites</div></div>
+                            <div class="project-metric"><div class="value">7</div><div class="label">Role Types</div></div>
+                            <div class="project-metric"><div class="value">94%</div><div class="label">Accuracy</div></div>
+                        </div>
+                        <div class="project-tags">
+                            <span>Adaptive Discovery</span><span>Proxy Rotation</span><span>Role Matching</span><span>Validation</span>
+                        </div>
+                    </div>
+                    <div class="project-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                            <circle cx="100" cy="100" r="60" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+                            <circle cx="100" cy="100" r="40" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
+                            <circle cx="100" cy="100" r="20" fill="var(--accent)" opacity="0.4"/>
+                            <circle cx="100" cy="40" r="6" fill="var(--accent)"/>
+                            <circle cx="160" cy="100" r="6" fill="var(--accent)"/>
+                            <circle cx="100" cy="160" r="6" fill="var(--accent)"/>
+                            <circle cx="40" cy="100" r="6" fill="var(--accent)"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-content">
+                        <span class="project-tag">🏠 Real Estate</span>
+                        <h3>Price Monitoring System</h3>
+                        <p>Continuous monitoring of real estate listings across multiple platforms with instant Slack alerts on price changes.</p>
+                        <div class="project-metrics">
+                            <div class="project-metric"><div class="value">5K+</div><div class="label">Daily Checks</div></div>
+                            <div class="project-metric"><div class="value">&lt;5min</div><div class="label">Alert Delay</div></div>
+                            <div class="project-metric"><div class="value">24/7</div><div class="label">Uptime</div></div>
+                        </div>
+                        <div class="project-tags">
+                            <span>Celery</span><span>Redis</span><span>Slack API</span><span>Docker</span>
+                        </div>
+                    </div>
+                    <div class="project-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                            <path d="M40 140 L80 100 L120 120 L160 60" stroke="rgba(168,85,247,0.4)" stroke-width="2" fill="none"/>
+                            <circle cx="40" cy="140" r="4" fill="var(--accent)"/>
+                            <circle cx="80" cy="100" r="4" fill="var(--accent)"/>
+                            <circle cx="120" cy="120" r="4" fill="var(--accent)"/>
+                            <circle cx="160" cy="60" r="4" fill="var(--accent)"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-content">
+                        <span class="project-tag">🛒 E-commerce</span>
+                        <h3>Competitor Analysis Engine</h3>
+                        <p>Real-time competitor pricing and inventory monitoring with automated reporting for e-commerce brands.</p>
+                        <div class="project-metrics">
+                            <div class="project-metric"><div class="value">100+</div><div class="label">Competitors</div></div>
+                            <div class="project-metric"><div class="value">10K+</div><div class="label">SKUs</div></div>
+                            <div class="project-metric"><div class="value">Daily</div><div class="label">Reports</div></div>
+                        </div>
+                        <div class="project-tags">
+                            <span>Price Monitoring</span><span>Inventory Tracking</span><span>Automated Reports</span><span>Slack Alerts</span>
+                        </div>
+                    </div>
+                    <div class="project-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                            <rect x="40" y="120" width="24" height="40" rx="4" fill="rgba(168,85,247,0.3)"/>
+                            <rect x="80" y="80" width="24" height="80" rx="4" fill="rgba(168,85,247,0.4)"/>
+                            <rect x="120" y="100" width="24" height="60" rx="4" fill="rgba(168,85,247,0.5)"/>
+                            <rect x="160" y="60" width="24" height="100" rx="4" fill="var(--accent)" opacity="0.6"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>The Team</h2>
+                <p>Two specialists, one mission: build systems that work and stay secure.</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card reveal">
+                    <div class="team-avatar">R</div>
+                    <h3>Rony Ahmed</h3>
+                    <p class="role">Lead Automation Engineer</p>
+                    <p class="bio">Backend engineer specializing in scalable data extraction, browser automation, and pipeline architecture. 4+ years building production scrapers.</p>
+                    <div class="team-skills">
+                        <span>Python</span><span>Node.js</span><span>Web Scraping</span>
+                        <span>Browser Automation</span><span>AWS</span><span>Docker</span><span>PostgreSQL</span>
+                    </div>
+                    <a href="https://github.com/MdRonyAhmed" target="_blank" rel="noopener" 
+                       style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:8px 16px;
+                              background:var(--surface);border:1px solid var(--border);border-radius:100px;
+                              color:var(--text);text-decoration:none;font-size:0.875rem;font-weight:500;
+                              transition:all 0.2s;"
+                       onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)';"
+                       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)';">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        github.com/MdRonyAhmed
+                    </a>
+                </div>
+                <div class="team-card reveal">
+                    <div class="team-avatar">S</div>
+                    <h3>Security Partner</h3>
+                    <p class="role">Lead Security Analyst</p>
+                    <p class="bio">Certified penetration tester specializing in network and web application security. Proven track record finding critical vulnerabilities in real-world environments.</p>
+                    <div class="team-skills">
+                        <span>Network Penetration Testing</span><span>Web Application Penetration Testing</span>
+                        <span>Active Directory Security Assessment</span><span>Vulnerability Assessment</span>
+                    </div>
+                    <div class="team-certs">
+                        <div class="cert-badge"><strong>PNPT</strong><span>TCM Security · Sep 2025</span></div>
+                        <div class="cert-badge"><strong>CEH Practical</strong><span>EC-Council · Sep 2024</span></div>
+                        <div class="cert-badge"><strong>Jr Penetration Tester</strong><span>TryHackMe · Aug 2023</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Simple Pricing</h2>
+                <p>No hidden fees. No surprises. Just results.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Data Extraction</h3>
+                    <p class="desc">One-time scrape or ongoing monitoring</p>
+                    <div class="price">$300<span>+</span></div>
+                    <p class="period">Starting price</p>
+                    <ul class="pricing-features">
+                        <li>Single or multiple sources</li>
+                        <li>Anti-bot handling included</li>
+                        <li>CSV/JSON/Excel delivery</li>
+                        <li>3–7 day turnaround</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Most Popular</span>
+                    <h3>Security Audit</h3>
+                    <p class="desc">Website, app &amp; network testing</p>
+                    <div class="price">$500<span>+</span></div>
+                    <p class="period">Starting price</p>
+                    <ul class="pricing-features">
+                        <li>Website vulnerability scan</li>
+                        <li>Network penetration test</li>
+                        <li>Mobile app security check</li>
+                        <li>Video proof of findings</li>
+                        <li>Prioritized fix roadmap</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <h3>Automation &amp; Custom</h3>
+                    <p class="desc">Pipelines, integrations &amp; AI systems</p>
+                    <div class="price">Custom</div>
+                    <p class="period">Let's discuss your needs</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Data + Security</li>
+                        <li>Scheduled data collection</li>
+                        <li>Self-healing error handling</li>
+                        <li>Cloud deployment</li>
+                        <li>AI-powered document processing</li>
+                        <li>Slack/email alerts</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="container">
+            <h2>Ready to extract <span class="gradient">your data?</span></h2>
+            <p>Tell us what you need. We'll tell you how fast we can get it — and how we'll keep it secure.</p>
+            <a href="mailto:hello@blackpark.io" class="cta-email">📧 hello@blackpark.io</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="logo">Black <span>Park</span></a>
+            <p>© 2025 Black Park. Built for extraction.</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
