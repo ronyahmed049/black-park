@@ -1,0 +1,11 @@
+# Logs
+*.log
+*.tmp
+
+# Build files
+node_modules/
+.env
+.DS_Store
+
+# Keep README
+!README.md

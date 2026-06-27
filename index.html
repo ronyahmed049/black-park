@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Park | Data Extraction & Security</title>
+    <title>Black Park | Technical Infrastructure for Growing Businesses</title>
+    <meta name="description" content="Black Park builds automated growth systems, data pipelines, and technical infrastructure for growing businesses. Not marketing. Systems.">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -18,9 +19,10 @@
             --border: rgba(255,255,255,0.06);
             --text: #e2e2e2;
             --text-muted: #6b6b6b;
-            --accent: #a855f7;
-            --accent-dim: rgba(168,85,247,0.1);
-            --accent-glow: rgba(168,85,247,0.3);
+            --accent: #3b82f6;
+            --accent-dim: rgba(59,130,246,0.1);
+            --accent-glow: rgba(59,130,246,0.3);
+            --secondary: #06b6d4;
             --font-body: 'Inter', sans-serif;
             --font-display: 'Space Grotesk', sans-serif;
         }
@@ -30,7 +32,7 @@
         /* Gradient Orbs */
         .orb { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.15; pointer-events: none; z-index: 0; }
         .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -200px; animation: float 20s ease-in-out infinite; }
-        .orb-2 { width: 400px; height: 400px; background: #ec4899; bottom: 10%; left: -100px; animation: float 15s ease-in-out infinite reverse; }
+        .orb-2 { width: 400px; height: 400px; background: var(--secondary); bottom: 10%; left: -100px; animation: float 15s ease-in-out infinite reverse; }
         @keyframes float {
             0%, 100% { transform: translate(0, 0); }
             33% { transform: translate(30px, -30px); }
@@ -40,35 +42,25 @@
         /* Navigation */
         nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
         nav .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; height: 72px; }
-        .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+        .logo-img { height: 42px; width: auto; border-radius: 8px; object-fit: contain; }
+        .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.02em; display: flex; align-items: center; gap: 12px; }
         .logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 32px; align-items: center; }
         .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
         .nav-links a:hover { color: var(--text); }
         .nav-cta { background: var(--accent); color: var(--bg) !important; padding: 10px 24px; border-radius: 100px; font-weight: 600; }
         .nav-cta:hover { opacity: 0.9; }
+        .menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; padding: 8px; }
 
         /* Hero */
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px 80px; position: relative; }
-        .hero-content { max-width: 1200px; text-align: center; position: relative; z-index: 1; margin: 0 auto; }
-        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; text-align: left; max-width: 1200px; margin: 0 auto; }
-        @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } }
+        .hero-content { max-width: 900px; text-align: center; position: relative; z-index: 1; margin: 0 auto; }
         .hero-badge { display: inline-block; padding: 8px 16px; background: var(--accent-dim); border: 1px solid rgba(168,85,247,0.2); border-radius: 100px; font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
         .hero h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.03em; }
-        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; }
+        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 640px; margin: 0 auto 40px; line-height: 1.7; }
         .hero-cta { display: inline-flex; align-items: center; gap: 12px; background: var(--accent); color: var(--bg); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: all 0.3s; box-shadow: 0 0 40px rgba(168,85,247,0.3); }
         .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(168,85,247,0.4); }
-
-        /* Code Block Visual */
-        .code-visual { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-top: 48px; text-align: left; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8125rem; line-height: 1.8; overflow: hidden; position: relative; }
-        .code-visual::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
-        .code-line { display: flex; gap: 16px; }
-        .line-num { color: var(--text-muted); min-width: 24px; text-align: right; user-select: none; }
-        .code-k { color: var(--accent); }
-        .code-v { color: #ec4899; }
-        .code-s { color: #6b6b6b; }
-        .code-n { color: #f59e0b; }
 
         /* Stats Bar */
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 900px; margin: 80px auto 0; padding: 32px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 16px; }
@@ -81,7 +73,7 @@
         .container { max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 80px; }
         .section-header h2 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 16px; }
-        .section-header p { color: var(--text-muted); font-size: 1.125rem; max-width: 560px; margin: 0 auto; }
+        .section-header p { color: var(--text-muted); font-size: 1.125rem; max-width: 640px; margin: 0 auto; }
 
         /* Services */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
@@ -106,12 +98,12 @@
         .project-metric .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
         .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
         .project-tags span { padding: 4px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); }
-        .project-visual { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(168,85,247,0.05), rgba(236,72,153,0.05)); border-left: 1px solid var(--border); padding: 40px; }
+        .project-visual { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(6,182,212,0.05)); border-left: 1px solid var(--border); padding: 40px; }
 
         /* Team */
         .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
         .team-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
-        .team-avatar { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), #ec4899); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--bg); margin-bottom: 20px; }
+        .team-avatar { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), var(--secondary)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--bg); margin-bottom: 20px; }
         .team-card h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 4px; }
         .team-card .role { color: var(--accent); font-size: 0.875rem; font-weight: 500; margin-bottom: 12px; }
         .team-card .bio { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.7; margin-bottom: 20px; }
@@ -122,40 +114,6 @@
         .cert-badge:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
         .cert-badge strong { color: var(--text); font-size: 0.875rem; font-weight: 600; }
         .cert-badge span { color: var(--text-muted); font-size: 0.6875rem; }
-
-        /* Pricing */
-        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
-        .pricing-card {
-            background: var(--surface-elevated); border: 1px solid var(--border);
-            border-radius: 24px; padding: 40px; position: relative;
-            display: flex; flex-direction: column;
-        }
-        .pricing-card.featured {
-            border-color: rgba(168,85,247,0.3);
-            box-shadow: 0 0 60px rgba(168,85,247,0.08);
-        }
-        .pricing-badge {
-            position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-            background: var(--accent); color: var(--bg);
-            padding: 6px 20px; border-radius: 0 0 12px 12px;
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-        }
-        .pricing-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 8px; }
-        .pricing-card .desc { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 24px; }
-        .pricing-card .price {
-            font-family: var(--font-display); font-size: 3rem; font-weight: 700;
-            margin-bottom: 8px;
-        }
-        .pricing-card .price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
-        .pricing-card .period { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 32px; }
-        .pricing-features { list-style: none; }
-        .pricing-features li {
-            padding: 12px 0; border-bottom: 1px solid var(--border);
-            color: var(--text-muted); font-size: 0.9375rem;
-            display: flex; align-items: center; gap: 12px;
-        }
-        .pricing-features li:last-child { border-bottom: none; }
-        .pricing-features li::before { content: '✓'; color: var(--accent); font-weight: 700; }
 
         /* CTA */
         .cta-section { text-align: center; }
@@ -173,19 +131,104 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .stats-bar { grid-template-columns: repeat(2, 1fr); }
-            .project-card { grid-template-columns: 1fr; }
-            .project-visual { height: 300px; }
-            .team-grid { grid-template-columns: 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; }
-            .pricing-card.featured { transform: none; }
+        /* Responsive - Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero { padding: 100px 24px 60px; }
+            .hero h1 { font-size: clamp(2rem, 4vw, 3rem); }
+            section { padding: 80px 24px; }
+            .project-content { padding: 32px; }
+            .team-card { padding: 32px; }
         }
+
+        /* Responsive - Mobile Large (640px - 768px) */
+        @media (max-width: 768px) {
+            nav .container { padding: 0 16px; height: 64px; position: relative; }
+            .logo-img { height: 36px; }
+            .menu-toggle { display: block; }
+            .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 16px; gap: 0; }
+            .nav-links.active { display: flex; }
+            .nav-links a { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 1rem; }
+            .nav-links a:last-child { border-bottom: none; }
+            .nav-cta { margin-top: 8px; text-align: center; }
+            
+            .hero { min-height: auto; padding: 100px 16px 60px; }
+            .hero h1 { font-size: 2.25rem; }
+            .hero p { font-size: 1rem; }
+            .hero-cta { padding: 14px 28px; font-size: 0.875rem; }
+            
+            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 24px; margin-top: 60px; }
+            .stat-value { font-size: 1.5rem; }
+            
+            .services-grid { grid-template-columns: 1fr; }
+            .service-card { padding: 24px; }
+            
+            .project-card { grid-template-columns: 1fr; }
+            .project-visual { height: 240px; border-left: none; border-top: 1px solid var(--border); }
+            .project-content { padding: 24px; }
+            .project-metrics { gap: 20px; flex-wrap: wrap; }
+            
+            .team-grid { grid-template-columns: 1fr; }
+            .team-card { padding: 24px; }
+            
+            .section-header { margin-bottom: 48px; }
+            .section-header h2 { font-size: 1.75rem; }
+            .section-header p { font-size: 1rem; }
+            
+            footer .container { flex-direction: column; gap: 32px; align-items: flex-start !important; }
+        }
+
+        /* Responsive - Mobile Small (< 640px) */
         @media (max-width: 640px) {
             .nav-links a:not(.nav-cta) { display: none; }
-            .hero h1 { font-size: 2.5rem; }
-            section { padding: 80px 24px; }
+            .nav-links.active a:not(.nav-cta) { display: block; }
+            .nav-links { gap: 12px; }
+            .menu-toggle { display: block; }
+            
+            .hero { padding: 90px 16px 40px; }
+            .hero h1 { font-size: 2rem; line-height: 1.15; }
+            .hero-badge { font-size: 0.6875rem; padding: 6px 12px; }
+            .hero-cta { width: 100%; justify-content: center; }
+            
+            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 20px; }
+            .stat-item { padding: 4px; }
+            .stat-value { font-size: 1.25rem; }
+            .stat-label { font-size: 0.625rem; }
+            
+            section { padding: 60px 16px; }
+            
+            .service-card { padding: 20px; }
+            .service-icon { width: 40px; height: 40px; font-size: 1.25rem; }
+            
+            .project-visual { height: 200px; padding: 24px; }
+            .project-card h3 { font-size: 1.25rem; }
+            .project-metrics { gap: 16px; }
+            .project-metric .value { font-size: 1.25rem; }
+            
+            .team-avatar { width: 52px; height: 52px; font-size: 1.25rem; }
+            .team-card h3 { font-size: 1.125rem; }
+            
+            .cta-section h2 { font-size: 1.75rem; }
+            .cta-email { width: 100%; justify-content: center; padding: 14px 24px; }
+            
+            footer { padding: 40px 16px; }
+        }
+
+        /* Responsive - Mobile Extra Small (< 480px) */
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.75rem; }
+            .hero p { font-size: 0.9375rem; }
+            
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .stat-value { font-size: 1.125rem; }
+            
+            .project-visual { height: 160px; }
+            .project-tags { gap: 6px; }
+            .project-tags span { padding: 3px 8px; font-size: 0.6875rem; }
+            
+            .team-skills span { font-size: 0.6875rem; padding: 3px 8px; }
+            .cert-badge { min-width: 80px; padding: 6px 8px; }
+            .cert-badge strong { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -195,54 +238,42 @@
 
     <nav>
         <div class="container">
-            <a href="#" class="logo">Black <span>Park</span></a>
-            <div class="nav-links">
+            <a href="#" class="logo">
+                <img src="photo_2026-06-24_13-55-25.jpg" alt="Black Park" class="logo-img">
+            </a>
+            <div class="nav-links" id="navLinks">
                 <a href="#services">Services</a>
                 <a href="#projects">Projects</a>
                 <a href="#team">Team</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#contact" class="nav-cta">Get in touch</a>
+                <a href="#contact" class="nav-cta">Book Free Audit</a>
             </div>
+            <button class="menu-toggle" onclick="document.getElementById('navLinks').classList.toggle('active')">☰</button>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="hero-grid">
-            <div class="hero-badge">Data Extraction & Security</div>
-            <h1>We extract data.<br>We test <span class="gradient">security.</span></h1>
-            <p>Black Park builds automated pipelines that collect, process, and deliver data — then we break them to make sure they're safe.</p>
-            <a href="mailto:hello@blackpark.io" class="hero-cta">Start a project →</a>
-            </div>
-            003cdiv class="code-visual" style="margin-top:0;"003e
-
-            <div class="code-visual">
-                <div class="code-line"><span class="line-num">1</span><span class="code-k">from</span> blackpark <span class="code-k">import</span> Extractor, Auditor</div>
-                <div class="code-line"><span class="line-num">2</span></div>
-                <div class="code-line"><span class="line-num">3</span>pipeline = Extractor(</div>
-                <div class="code-line"><span class="line-num">4</span>  proxies=<span class="code-v">"rotating"</span>,</div>
-                <div class="code-line"><span class="line-num">5</span>  anti_detect=<span class="code-n">True</span>,</div>
-                <div class="code-line"><span class="line-num">6</span>  output=<span class="code-v">"structured_json"</span></div>
-                <div class="code-line"><span class="line-num">7</span>)</div>
-                <div class="code-line"><span class="line-num">8</span></div>
-                <div class="code-line"><span class="line-num">9</span><span class="code-s"># 56,802 records extracted, validated, secured</span></div>
-            </div>
+        <div class="hero-content">
+            <div class="hero-badge">Technical Infrastructure Partner</div>
+            <h1>Stop duct-taping your<br>business <span class="gradient">together.</span></h1>
+            <p>Most agencies run your ads and hope. We build the technical infrastructure that makes growth predictable — automated lead capture, smart routing, data pipelines, and systems that work while you sleep.</p>
+            <a href="#contact" class="hero-cta">Book a Free 15-Minute Audit →</a>
 
             <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value">56K+</div>
-                    <div class="stat-label">Records Extracted</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">50+</div>
-                    <div class="stat-label">Orgs Monitored</div>
-                </div>
                 <div class="stat-item">
                     <div class="stat-value">4+</div>
                     <div class="stat-label">Years Experience</div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-value">56K+</div>
+                    <div class="stat-label">Records Processed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">Faster Systems</div>
+                </div>
+                <div class="stat-item">
                     <div class="stat-value">100%</div>
-                    <div class="stat-label">Satisfaction</div>
+                    <div class="stat-label">Custom Built</div>
                 </div>
             </div>
         </div>
@@ -251,105 +282,161 @@
     <section id="services">
         <div class="container">
             <div class="section-header reveal">
-                <h2>What We Do</h2>
-                <p>From data extraction to security audits — we handle the complex stuff so you don't have to.</p>
+                <h2>What We Build</h2>
+                <p>We don't do marketing. We build the infrastructure that makes marketing work.</p>
             </div>
 
             <div style="margin-bottom:60px;">
-                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🎯 Data & Automation</h3>
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🚀 Growth Systems</h3>
                 <div class="services-grid">
                     <div class="service-card reveal">
                         <div class="service-icon">🎯</div>
-                        <h3>Data Extraction</h3>
-                        <p>We extract data from websites that block normal tools. Prices, products, contacts — whatever you need, we get it.</p>
+                        <h3>Lead Capture Systems</h3>
+                        <p>Automated lead capture that routes hot prospects to your phone in 60 seconds. Not forms that sit in inboxes.</p>
                         <ul class="service-features">
-                            <li>Works on protected sites</li>
-                            <li>Handles CAPTCHAs automatically</li>
-                            <li>JavaScript-heavy pages</li>
-                            <li>Runs on schedule</li>
+                            <li>Multi-channel capture (web, social, ads)</li>
+                            <li>Smart lead scoring (1-100 quality score)</li>
+                            <li>Instant SMS/email routing</li>
+                            <li>Self-healing when things break</li>
                         </ul>
                     </div>
                     <div class="service-card reveal">
                         <div class="service-icon">⚡</div>
-                        <h3>Automation Pipelines</h3>
-                        <p>Set it and forget it. We build systems that collect, clean, and deliver data to your tools automatically.</p>
+                        <h3>CRM Automation</h3>
+                        <p>Your CRM should work for you, not the other way around. We wire it up so leads flow, tasks trigger, and nothing falls through cracks.</p>
                         <ul class="service-features">
-                            <li>Daily/weekly schedules</li>
-                            <li>Auto-fixes when things break</li>
-                            <li>Email/Slack alerts</li>
-                            <li>Runs on your cloud</li>
+                            <li>HubSpot/Salesforce automation</li>
+                            <li>Auto-enrichment with public data</li>
+                            <li>Follow-up sequences that convert</li>
+                            <li>Pipeline stage automation</li>
                         </ul>
                     </div>
                     <div class="service-card reveal">
-                        <div class="service-icon">🔧</div>
-                        <h3>Legacy Integration</h3>
-                        <p>Still using old software? We connect legacy systems to modern tools without losing any data.</p>
+                        <div class="service-icon">📊</div>
+                        <h3>Analytics Dashboards</h3>
+                        <p>Real-time dashboards that show what's actually working. No more guessing. No more monthly PDF reports that arrive too late.</p>
                         <ul class="service-features">
-                            <li>Old ERP to modern API</li>
-                            <li>Data cleanup & transfer</li>
-                            <li>No downtime during switch</li>
-                            <li>Full backup included</li>
+                            <li>Live conversion tracking</li>
+                            <li>Lead source attribution</li>
+                            <li>Revenue pipeline visibility</li>
+                            <li>Mobile-friendly reporting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom:60px;">
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🔍 Data Intelligence</h3>
+                <div class="services-grid">
+                    <div class="service-card reveal">
+                        <div class="service-icon">🕵️</div>
+                        <h3>Competitor Monitoring</h3>
+                        <p>Track competitor pricing, inventory, and messaging automatically. Know what they're doing before they know you know.</p>
+                        <ul class="service-features">
+                            <li>Price tracking across platforms</li>
+                            <li>Inventory change alerts</li>
+                            <li>Review sentiment monitoring</li>
+                            <li>Weekly intelligence reports</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">🔄</div>
+                        <h3>Data Pipelines</h3>
+                        <p>Extract data from any source, clean it, transform it, and deliver it where you need it. Structured. Scheduled. Reliable.</p>
+                        <ul class="service-features">
+                            <li>Web scraping at scale</li>
+                            <li>API integration (any system)</li>
+                            <li>Data warehouse setup</li>
+                            <li>Automated quality checks</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">📈</div>
+                        <h3>Market Research</h3>
+                        <p>Automated market research that delivers insights weekly. Competitor analysis, trend detection, opportunity identification.</p>
+                        <ul class="service-features">
+                            <li>Trend detection algorithms</li>
+                            <li>Opportunity scoring</li>
+                            <li>Automated report generation</li>
+                            <li>Slack/email delivery</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom:60px;">
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🔧 Infrastructure Modernization</h3>
+                <div class="services-grid">
+                    <div class="service-card reveal">
+                        <div class="service-icon">🔗</div>
+                        <h3>Legacy System Integration</h3>
+                        <p>Connect your old ERP, inventory, or CRM to modern tools without losing data. APIs, webhooks, and custom bridges.</p>
+                        <ul class="service-features">
+                            <li>Old ERP → modern API</li>
+                            <li>Database sync (no downtime)</li>
+                            <li>Webhook automation</li>
+                            <li>Legacy format conversion</li>
+                        </ul>
+                    </div>
+                    <div class="service-card reveal">
+                        <div class="service-icon">☁️</div>
+                        <h3>Cloud Architecture</h3>
+                        <p>Move from overloaded spreadsheets and local servers to cloud systems that scale. AWS, DigitalOcean, serverless.</p>
+                        <ul class="service-features">
+                            <li>AWS/DigitalOcean setup</li>
+                            <li>Auto-scaling configuration</li>
+                            <li>Serverless cost optimization</li>
+                            <li>Disaster recovery</li>
                         </ul>
                     </div>
                     <div class="service-card reveal">
                         <div class="service-icon">🤖</div>
-                        <h3>AI Systems Integration</h3>
-                        <p>Custom AI agents and document processors trained on your business data. From chatbots to automated report generation.</p>
+                        <h3>Workflow Automation</h3>
+                        <p>Replace repetitive manual tasks with automated workflows. If you do it more than 3 times, it should be automated.</p>
                         <ul class="service-features">
-                            <li>GPT-powered chatbots</li>
-                            <li>Document analysis pipelines</li>
-                            <li>Internal knowledge bases</li>
-                            <li>AI + scraping combined</li>
+                            <li>n8n/Zapier custom workflows</li>
+                            <li>Document processing pipelines</li>
+                            <li>Approval routing systems</li>
+                            <li>Slack/email notifications</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🛡️ Security Services</h3>
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px;color:var(--text-muted);">🛡️ Security Foundation</h3>
                 <div class="services-grid">
                     <div class="service-card reveal">
-                        <div class="service-icon">🌐</div>
-                        <h3>Website Security Check</h3>
-                        <p>We try to break into your website like a real attacker. Then show you exactly how to lock the doors.</p>
+                        <div class="service-icon">🔐</div>
+                        <h3>Security Audits</h3>
+                        <p>Find vulnerabilities before hackers do. We test like attackers, report like engineers, fix like partners.</p>
                         <ul class="service-features">
-                            <li>Login & payment form testing</li>
-                            <li>Find data leak risks</li>
-                            <li>Check hidden admin pages</li>
-                            <li>Video proof of each issue</li>
+                            <li>Vulnerability assessment</li>
+                            <li>Penetration testing</li>
+                            <li>Payment flow security</li>
+                            <li>Video proof of findings</li>
                         </ul>
                     </div>
                     <div class="service-card reveal">
-                        <div class="service-icon">📱</div>
-                        <h3>App Security Audit</h3>
-                        <p>Mobile app testing for startups. We check if your app leaks customer data or has backdoors.</p>
+                        <div class="service-icon">📋</div>
+                        <h3>Compliance Readiness</h3>
+                        <p>PCI, HIPAA, SOC 2 — we audit your systems against requirements and build the roadmap to pass.</p>
                         <ul class="service-features">
-                            <li>API & database checks</li>
-                            <li>Payment flow testing</li>
-                            <li>User data protection</li>
-                            <li>App store compliance</li>
+                            <li>Gap analysis</li>
+                            <li>Fix prioritization</li>
+                            <li>Documentation preparation</li>
+                            <li>Ongoing monitoring</li>
                         </ul>
                     </div>
                     <div class="service-card reveal">
-                        <div class="service-icon">🎯</div>
-                        <h3>Small Business Security Package</h3>
-                        <p>Everything checked in one go: website, network, emails, and cloud accounts. Perfect for businesses without an IT team.</p>
+                        <div class="service-icon">🛡️</div>
+                        <h3>Security Monitoring</h3>
+                        <p>Ongoing monitoring that alerts you to threats in real-time. Not monthly reports — instant alerts.</p>
                         <ul class="service-features">
-                            <li>Full infrastructure scan</li>
-                            <li>Employee phishing test</li>
-                            <li>Cloud account audit</li>
-                            <li>Priority fix roadmap</li>
-                        </ul>
-                    </div>
-                    <div class="service-card reveal">
-                        <div class="service-icon">🔍</div>
-                        <h3>Network Security Scan</h3>
-                        <p>We scan your office network and servers to find hidden entry points before hackers do.</p>
-                        <ul class="service-features">
-                            <li>Find weak passwords & open ports</li>
-                            <li>Check Wi-Fi security</li>
-                            <li>Test file sharing access</li>
-                            <li>Plain-English fix guide</li>
+                            <li>Real-time threat detection</li>
+                            <li>Automated alert routing</li>
+                            <li>Incident response plans</li>
+                            <li>Monthly security briefings</li>
                         </ul>
                     </div>
                 </div>
@@ -361,14 +448,14 @@
         <div class="container">
             <div class="section-header reveal">
                 <h2>Selected Work</h2>
-                <p>Real projects, real results. Every number is verified.</p>
+                <p>Real systems, real results. Every number verified.</p>
             </div>
             <div class="projects-grid">
                 <div class="project-card reveal">
                     <div class="project-content">
                         <span class="project-tag">🏛️ Government Intelligence</span>
                         <h3>Project Intelligence Pipeline</h3>
-                        <p>Built a scalable pipeline scraping 56,802 government project records with automated PDF processing and LLM-powered field extraction.</p>
+                        <p>Built a scalable pipeline scraping 56,802 government project records with automated PDF processing and LLM-powered field extraction. Monthly updates, zero manual intervention.</p>
                         <div class="project-metrics">
                             <div class="project-metric"><div class="value">56K+</div><div class="label">Records</div></div>
                             <div class="project-metric"><div class="value">15+</div><div class="label">Fields</div></div>
@@ -392,16 +479,16 @@
 
                 <div class="project-card reveal">
                     <div class="project-content">
-                        <span class="project-tag">🎯 Charity Intelligence</span>
-                        <h3>Leadership Contact Discovery</h3>
-                        <p>Adaptive scraper that discovers leadership pages across 50+ charity websites, extracting decision-maker contacts with role verification.</p>
+                        <span class="project-tag">🚀 Growth Systems</span>
+                        <h3>Restaurant Lead Capture System</h3>
+                        <p>Automated lead capture system for a 3-location restaurant chain. Online orders routed to nearest location, follow-up sequences for abandoned carts, real-time conversion dashboard.</p>
                         <div class="project-metrics">
-                            <div class="project-metric"><div class="value">50+</div><div class="label">Websites</div></div>
-                            <div class="project-metric"><div class="value">7</div><div class="label">Role Types</div></div>
-                            <div class="project-metric"><div class="value">94%</div><div class="label">Accuracy</div></div>
+                            <div class="project-metric"><div class="value">47%</div><div class="label">More Orders</div></div>
+                            <div class="project-metric"><div class="value">$12K</div><div class="label">Monthly Revenue</div></div>
+                            <div class="project-metric"><div class="value">8hrs</div><div class="label">Weekly Saved</div></div>
                         </div>
                         <div class="project-tags">
-                            <span>Adaptive Discovery</span><span>Proxy Rotation</span><span>Role Matching</span><span>Validation</span>
+                            <span>Lead Capture</span><span>HubSpot</span><span>Automation</span><span>Dashboard</span>
                         </div>
                     </div>
                     <div class="project-visual">
@@ -419,16 +506,40 @@
 
                 <div class="project-card reveal">
                     <div class="project-content">
-                        <span class="project-tag">🏠 Real Estate</span>
-                        <h3>Price Monitoring System</h3>
-                        <p>Continuous monitoring of real estate listings across multiple platforms with instant Slack alerts on price changes.</p>
+                        <span class="project-tag">🔧 Infrastructure</span>
+                        <h3>Legacy ERP Integration</h3>
+                        <p>Connected a 1990s manufacturing ERP to modern Shopify store, CRM, and shipping systems. Real-time inventory sync, automated order routing, zero downtime migration.</p>
                         <div class="project-metrics">
-                            <div class="project-metric"><div class="value">5K+</div><div class="label">Daily Checks</div></div>
-                            <div class="project-metric"><div class="value">&lt;5min</div><div class="label">Alert Delay</div></div>
-                            <div class="project-metric"><div class="value">24/7</div><div class="label">Uptime</div></div>
+                            <div class="project-metric"><div class="value">3</div><div class="label">Systems Connected</div></div>
+                            <div class="project-metric"><div class="value">0</div><div class="label">Downtime</div></div>
+                            <div class="project-metric"><div class="value">Real-time</div><div class="label">Sync</div></div>
                         </div>
                         <div class="project-tags">
-                            <span>Celery</span><span>Redis</span><span>Slack API</span><span>Docker</span>
+                            <span>API Integration</span><span>ERP</span><span>Shopify</span><span>Python</span>
+                        </div>
+                    </div>
+                    <div class="project-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                            <rect x="40" y="120" width="24" height="40" rx="4" fill="rgba(168,85,247,0.3)"/>
+                            <rect x="80" y="80" width="24" height="80" rx="4" fill="rgba(168,85,247,0.4)"/>
+                            <rect x="120" y="100" width="24" height="60" rx="4" fill="rgba(168,85,247,0.5)"/>
+                            <rect x="160" y="60" width="24" height="100" rx="4" fill="var(--accent)" opacity="0.6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-content">
+                        <span class="project-tag">🛡️ Security</span>
+                        <h3>E-commerce Security Hardening</h3>
+                        <p>Full security audit for a Shopify store processing 500+ orders/day. Found 3 critical vulnerabilities in payment flow, fixed before Black Friday rush.</p>
+                        <div class="project-metrics">
+                            <div class="project-metric"><div class="value">3</div><div class="label">Critical Fixes</div></div>
+                            <div class="project-metric"><div class="value">0</div><div class="label">Breaches Since</div></div>
+                            <div class="project-metric"><div class="value">PCI</div><div class="label">Compliant</div></div>
+                        </div>
+                        <div class="project-tags">
+                            <span>Penetration Testing</span><span>Payment Security</span><span>PCI DSS</span><span>Shopify</span>
                         </div>
                     </div>
                     <div class="project-visual">
@@ -441,30 +552,6 @@
                         </svg>
                     </div>
                 </div>
-
-                <div class="project-card reveal">
-                    <div class="project-content">
-                        <span class="project-tag">🛒 E-commerce</span>
-                        <h3>Competitor Analysis Engine</h3>
-                        <p>Real-time competitor pricing and inventory monitoring with automated reporting for e-commerce brands.</p>
-                        <div class="project-metrics">
-                            <div class="project-metric"><div class="value">100+</div><div class="label">Competitors</div></div>
-                            <div class="project-metric"><div class="value">10K+</div><div class="label">SKUs</div></div>
-                            <div class="project-metric"><div class="value">Daily</div><div class="label">Reports</div></div>
-                        </div>
-                        <div class="project-tags">
-                            <span>Price Monitoring</span><span>Inventory Tracking</span><span>Automated Reports</span><span>Slack Alerts</span>
-                        </div>
-                    </div>
-                    <div class="project-visual">
-                        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
-                            <rect x="40" y="120" width="24" height="40" rx="4" fill="rgba(168,85,247,0.3)"/>
-                            <rect x="80" y="80" width="24" height="80" rx="4" fill="rgba(168,85,247,0.4)"/>
-                            <rect x="120" y="100" width="24" height="60" rx="4" fill="rgba(168,85,247,0.5)"/>
-                            <rect x="160" y="60" width="24" height="100" rx="4" fill="var(--accent)" opacity="0.6"/>
-                        </svg>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -473,17 +560,17 @@
         <div class="container">
             <div class="section-header reveal">
                 <h2>The Team</h2>
-                <p>Two specialists, one mission: build systems that work and stay secure.</p>
+                <p>Built by engineers, not marketers. We measure, build, optimize — then we break it to make sure it's secure.</p>
             </div>
             <div class="team-grid">
                 <div class="team-card reveal">
                     <div class="team-avatar">R</div>
                     <h3>Rony Ahmed</h3>
-                    <p class="role">Lead Automation Engineer</p>
-                    <p class="bio">Backend engineer specializing in scalable data extraction, browser automation, and pipeline architecture. 4+ years building production scrapers.</p>
+                    <p class="role">Founder & Lead Systems Engineer</p>
+                    <p class="bio">Backend engineer with 4+ years building production systems for fast-growing companies. Specialized in data pipelines, browser automation, and cloud architecture. I don't just write code — I build systems that scale.</p>
                     <div class="team-skills">
-                        <span>Python</span><span>Node.js</span><span>Web Scraping</span>
-                        <span>Browser Automation</span><span>AWS</span><span>Docker</span><span>PostgreSQL</span>
+                        <span>Python</span><span>Node.js</span><span>AWS</span><span>Docker</span>
+                        <span>PostgreSQL</span><span>Redis</span><span>Web Scraping</span><span>API Design</span>
                     </div>
                     <a href="https://github.com/MdRonyAhmed" target="_blank" rel="noopener" 
                        style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:8px 16px;
@@ -502,68 +589,16 @@
                     <div class="team-avatar">S</div>
                     <h3>Security Partner</h3>
                     <p class="role">Lead Security Analyst</p>
-                    <p class="bio">Certified penetration tester specializing in network and web application security. Proven track record finding critical vulnerabilities in real-world environments.</p>
+                    <p class="bio">Certified penetration tester specializing in network and web application security. We don't just find vulnerabilities — we prove them with video evidence and show you exactly how to fix them.</p>
                     <div class="team-skills">
-                        <span>Network Penetration Testing</span><span>Web Application Penetration Testing</span>
-                        <span>Active Directory Security Assessment</span><span>Vulnerability Assessment</span>
+                        <span>Network Penetration Testing</span><span>Web Application Testing</span>
+                        <span>Active Directory Assessment</span><span>Vulnerability Assessment</span>
                     </div>
                     <div class="team-certs">
-                        <div class="cert-badge"><strong>PNPT</strong><span>TCM Security · Sep 2025</span></div>
-                        <div class="cert-badge"><strong>CEH Practical</strong><span>EC-Council · Sep 2024</span></div>
-                        <div class="cert-badge"><strong>Jr Penetration Tester</strong><span>TryHackMe · Aug 2023</span></div>
+                        <div class="cert-badge"><strong>PNPT</strong><span>TCM Security</span></div>
+                        <div class="cert-badge"><strong>CEH Practical</strong><span>EC-Council</span></div>
+                        <div class="cert-badge"><strong>Jr Penetration Tester</strong><span>TryHackMe</span></div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="pricing">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>Simple Pricing</h2>
-                <p>No hidden fees. No surprises. Just results.</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Data Extraction</h3>
-                    <p class="desc">One-time scrape or ongoing monitoring</p>
-                    <div class="price">$300<span>+</span></div>
-                    <p class="period">Starting price</p>
-                    <ul class="pricing-features">
-                        <li>Single or multiple sources</li>
-                        <li>Anti-bot handling included</li>
-                        <li>CSV/JSON/Excel delivery</li>
-                        <li>3–7 day turnaround</li>
-                    </ul>
-                </div>
-                <div class="pricing-card featured">
-                    <span class="pricing-badge">Most Popular</span>
-                    <h3>Security Audit</h3>
-                    <p class="desc">Website, app &amp; network testing</p>
-                    <div class="price">$500<span>+</span></div>
-                    <p class="period">Starting price</p>
-                    <ul class="pricing-features">
-                        <li>Website vulnerability scan</li>
-                        <li>Network penetration test</li>
-                        <li>Mobile app security check</li>
-                        <li>Video proof of findings</li>
-                        <li>Prioritized fix roadmap</li>
-                    </ul>
-                </div>
-                <div class="pricing-card">
-                    <h3>Automation &amp; Custom</h3>
-                    <p class="desc">Pipelines, integrations &amp; AI systems</p>
-                    <div class="price">Custom</div>
-                    <p class="period">Let's discuss your needs</p>
-                    <ul class="pricing-features">
-                        <li>Everything in Data + Security</li>
-                        <li>Scheduled data collection</li>
-                        <li>Self-healing error handling</li>
-                        <li>Cloud deployment</li>
-                        <li>AI-powered document processing</li>
-                        <li>Slack/email alerts</li>
-                        <li>Dedicated support</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -571,16 +606,121 @@
 
     <section id="contact" class="cta-section">
         <div class="container">
-            <h2>Ready to extract <span class="gradient">your data?</span></h2>
-            <p>Tell us what you need. We'll tell you how fast we can get it — and how we'll keep it secure.</p>
-            <a href="mailto:hello@blackpark.io" class="cta-email">📧 hello@blackpark.io</a>
+            <div class="section-header reveal" style="margin-bottom: 48px;">
+                <h2>Ready to stop duct-taping and<br>start <span class="gradient">building?</span></h2>
+                <p>Book a free 15-minute audit. We'll look at your current setup, identify the biggest leak in your funnel, and tell you exactly what we'd build to fix it.</p>
+            </div>
+            
+            <div style="max-width: 640px; margin: 0 auto;">
+                <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzTFCD56W-eDU4JPwNXNL1ne490b_IGgSut3pthhQVEAt-MWmaFRL5az2tcYfLEC6ux/exec" method="POST" style="text-align: left;">
+                    <!-- Honeypot field - hidden from humans -->
+                    <div style="position: absolute; left: -9999px; opacity: 0;">
+                        <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="name" style="display: block; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Name *</label>
+                        <input type="text" id="name" name="name" required 
+                               style="width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); 
+                                      border-radius: 8px; color: var(--text); font-size: 0.9375rem; outline: none; transition: border-color 0.2s;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="email" style="display: block; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Email *</label>
+                        <input type="email" id="email" name="email" required 
+                               style="width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); 
+                                      border-radius: 8px; color: var(--text); font-size: 0.9375rem; outline: none; transition: border-color 0.2s;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="company" style="display: block; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Company</label>
+                        <input type="text" id="company" name="company" 
+                               style="width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); 
+                                      border-radius: 8px; color: var(--text); font-size: 0.9375rem; outline: none; transition: border-color 0.2s;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="service" style="display: block; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">What do you need help with? *</label>
+                        <select id="service" name="service" required 
+                                style="width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); 
+                                       border-radius: 8px; color: var(--text); font-size: 0.9375rem; outline: none; transition: border-color 0.2s; cursor: pointer;"
+                                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                            <option value="" style="background: var(--surface);">Select a service...</option>
+                            <option value="growth" style="background: var(--surface);">Growth Systems</option>
+                            <option value="data" style="background: var(--surface);">Data Intelligence</option>
+                            <option value="infrastructure" style="background: var(--surface);">Infrastructure Modernization</option>
+                            <option value="security" style="background: var(--surface);">Security Foundation</option>
+                            <option value="not_sure" style="background: var(--surface);">Not sure yet</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <label for="message" style="display: block; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Message *</label>
+                        <textarea id="message" name="message" rows="4" required 
+                                  style="width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); 
+                                         border-radius: 8px; color: var(--text); font-size: 0.9375rem; outline: none; transition: border-color 0.2s; resize: vertical;"
+                                  onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn" 
+                            style="width: 100%; padding: 14px 32px; background: var(--accent); color: var(--bg); border: none; 
+                                   border-radius: 100px; font-weight: 600; font-size: 0.9375rem; cursor: pointer; transition: all 0.3s;"
+                            onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        Send Message →
+                    </button>
+                    
+                    <div id="formStatus" style="margin-top: 16px; text-align: center; font-size: 0.875rem; min-height: 24px;"></div>
+                </form>
+                
+                <div style="margin-top: 24px; text-align: center;">
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">
+                        Prefer email? <a href="mailto:hello@blackpark.io" style="color: var(--accent); text-decoration: none;">hello@blackpark.io</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <div class="container">
-            <a href="#" class="logo">Black <span>Park</span></a>
-            <p>© 2025 Black Park. Built for extraction.</p>
+        <div class="container" style="flex-direction: column; gap: 48px; padding: 60px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; flex-wrap: wrap; gap: 32px;">
+                
+                <div style="display: flex; flex-direction: column; gap: 12px; max-width: 300px;">
+                    <img src="photo_2026-06-24_13-55-25.jpg" alt="Black Park" class="logo-img" style="height: 48px; width: auto;">
+                    <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; margin: 0;">
+                        Technical infrastructure partner for growing businesses. We build systems, not just run campaigns.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 64px; flex-wrap: wrap;">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <strong style="color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Services</strong>
+                        <a href="#services" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Growth Systems</a>
+                        <a href="#services" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Data Intelligence</a>
+                        <a href="#services" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Infrastructure</a>
+                        <a href="#services" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Security</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <strong style="color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Company</strong>
+                        <a href="#projects" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Projects</a>
+                        <a href="#team" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Team</a>
+                        <a href="#contact" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Contact</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <strong style="color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Connect</strong>
+                        <a href="mailto:hello@blackpark.io" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">hello@blackpark.io</a>
+                        <a href="https://github.com/MdRonyAhmed" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid var(--border); padding-top: 24px; width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin: 0;">© 2026 Black Park. Built for builders.</p>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin: 0;">Remote-first · Serving US & UK</p>
+            </div>
         </div>
     </footer>
 
@@ -594,6 +734,45 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const submitBtn = document.getElementById('submitBtn');
+            const formStatus = document.getElementById('formStatus');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            formStatus.textContent = '';
+            formStatus.style.color = 'var(--text-muted)';
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    formStatus.textContent = '✅ Message sent! We\'ll get back to you within 24 hours.';
+                    formStatus.style.color = '#10b981';
+                    form.reset();
+                } else {
+                    formStatus.textContent = '❌ ' + (data.message || 'Something went wrong. Please try again.');
+                    formStatus.style.color = '#ef4444';
+                }
+            })
+            .catch(error => {
+                formStatus.textContent = '❌ Network error. Please try again or email us directly.';
+                formStatus.style.color = '#ef4444';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message →';
+            });
+        });
     </script>
 </body>
 </html>
